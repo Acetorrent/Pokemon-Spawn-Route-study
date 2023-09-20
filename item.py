@@ -10,7 +10,7 @@ class item:
       self.status_recovery = []
 
     def add_status_recovery(self, value: str):
-      for item in status_list:
+      for item in self.status_list:
         if value is item:
           self.status_recovery.append(value)
           print(f"{self.name}, will now cure {value}")
