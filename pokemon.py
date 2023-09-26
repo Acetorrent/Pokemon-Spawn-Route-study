@@ -54,11 +54,8 @@ class pokemon:
 
 
         #Level and XP Calculation
-        if xp_category in self.possible_xp_groups:
-          self.xp_category = xp_category
-        else:
-          self.xp_category = None
-          print ("\nERROR: No exp category with name {xp_category} found.\n\n")
+
+        self.xp_category = xp_category
         self.level = 1
         self.max_xp = 0
         self.current_xp = 0
@@ -168,7 +165,7 @@ class pokemon:
 
 
     def set_max_xp(self):
-      self.max_xp = (self.calculate_total_xp(self.level + 1) - self.calculate_total_xp(self.level))
+      self.max_xp = (int(self.calculate_total_xp(self.level + 1)) - int(self.calculate_total_xp(self.level)))
 
 
     #Calculate total xp accumulate up until a level:
@@ -180,8 +177,9 @@ class pokemon:
       singular_xpGroup = {"Fast": int((4 * (n**3)) / 5), "Medium Fast": int(n**3), "Medium Slow": int(((6 * n**3)/5) - (15 * (n ** 2)) + (100 * n) - 140), "Slow": int((5 * (n ** 3))/4)}
 
       if self.xp_category is None:
-        return
         print ("\n\nInputERROR: Attempting to set max_xp to xp_category of value \'None\'\n")
+        return
+        
 
       elif self.xp_category in self.possible_xp_groups:
 
@@ -195,20 +193,21 @@ class pokemon:
           elif n >= 50 and n < 68:
             return int(((n ** 3) * (150 - n))/100)
           elif n >= 68 and n < 98:
-            return (n ** 3) * int(round((1911 - (10 * n))/3) / 500)
-          elif n >= 98 and n < 100:
+            return int(((n ** 3) * round((1911 - 10 * (n)) / 3)) / 500)
+          elif n >= 98 and n <= 100:
             return int(((n ** 3) * (160 - n))/100)
-          else:
-            print (f"\nLvl_OUTBOUND: Level: {n} is out of bound")
+
+
 
         elif self.xp_category is "Fluctuating":
           if n < 15:
             return int(((n ** 3) * ((round((n + 1)/3)) + 24)) / 50)  
           elif n >= 15 and n < 36:
             return int(((n ** 3) * (n + 14))/50)
-          elif n >= 36 and n < 100:
+          elif n >= 36 and n <= 100:
             return int(((n ** 3) * (round(n / 2) + 32))/50)
-          else:
-            print (f"\nLvl_OUTBOUND: Level: {n} is out of bound")
+          
+        return self.calculate_total_xp(100)
+
 
     
