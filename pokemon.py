@@ -165,7 +165,12 @@ class pokemon:
 
 
     def set_max_xp(self):
-      self.max_xp = (int(self.calculate_total_xp(self.level + 1)) - int(self.calculate_total_xp(self.level)))
+        
+
+        self.max_xp = (int(self.calculate_total_xp(self.level + 1)) - int(self.calculate_total_xp(self.level)))
+        if self.xp_category == "Medium Slow":
+            if self.level == 1:
+                self.max_xp = 9
 
 
     #Calculate total xp accumulate up until a level:
