@@ -45,13 +45,13 @@ class pokemon:
     possible_xp_groups = ("Fast", "Medium Fast", "Medium Slow", "Slow", "Erratic", "Fluctuating")
 
     #Init and Setup, Roll Random IVs for the pokemon
-    def __init__(self, name: str, base_total_stat: int, xp_category: str, nature: str = possible_nature[random.randint(0, len(possible_nature) - 1)]):
+    def __init__(self, name: str, base_total_stat: int, xp_category: str, xp_yield: int, nature: str = possible_nature[random.randint(0, len(possible_nature) - 1)]):
         
         #Status Inflicted:
         self.status = []
         self.accuracy = 100
         self.evasion = 100
-
+        self.type = None
 
         #Level and XP Calculation
 
@@ -60,6 +60,11 @@ class pokemon:
         self.max_xp = 0
         self.current_xp = 0
 
+
+        #Yields Stats:
+        self.xp_yield = xp_yield
+        self.EV_yield = {"Health": 0, "Attack": 0, "Special Attack": 0, "Defense": 0, "Special Defense": 0, "Speed": 0}
+
         #Name and Nature of the Pokemon
         self.nature = nature
         self.name = name
@@ -67,7 +72,7 @@ class pokemon:
         self.ability = None
         self.possible_gender = []
         self.gender = None
-        self.type = None
+        self.base_friendship = 0
         
         #Skill list of the Pokemons
         self.learnable_skill = {}
@@ -103,6 +108,8 @@ class pokemon:
         self.set_IV()
         self.refresh_nature_mod()
         self.set_max_xp()
+
+        self.current_xp = self.max_xp
 
     #Refresh each time Final stat formula Parameter (level, IV, EV, Base) is changed, or reset to the Default state
     def refresh_stat(self):
@@ -163,7 +170,7 @@ class pokemon:
         
       self.refresh_stat()
 
-
+    #Calculate XP needed to levelup base on the pokemon Current level
     def set_max_xp(self):
         
 
@@ -214,5 +221,48 @@ class pokemon:
           
         return self.calculate_total_xp(100)
 
+    #Level Up a Pokemon
+    def level_up(self):
+      if self.level < 100:
+        if self.current_xp >= self.max_xp:
 
+          #Set new xp and level up
+
+          self.current_xp -= self.max_xp
+          self.level += 1
+
+          self.set_max_xp()
+      else:
+        print(f"{self.name} is at max level")
+      
+      self.refresh_stat()
+      
+    #Allow a POkemon to gain xp
+    def gain_xp(self, front_pokemon: object, enemy: object, primaryReceiver: bool = True):
+      
+      exp_gain = 0 #Total amount of exp gain
+
+      b = enemy.xp_yield #Enemy Pokemon Base XP Yield
+      L_e = enemy.level #Enemy Pokemon Current Level
+      L_p = front_pokemon.level #Victorious Pokemon, Front line Pokemon current level
+      s = 1 #Is the Pokemon receiving this xp the Primary receiver (1 if yes, 2 if no)
+      t = 1 #If the Pokemon is Originally owned by the player (1 if yes, 1.5 if no)
+      e = 1 #If the Pokemon holding a "Lucky Egg" (1 if not, 1.5 if yes)
+      v = 1 #If the winning Pokémon is at or past the level where it would be able to evolve, but it has not. (1.2 if it has not evolve, 1 if otherwise )
+      f = 1 #If the Pokemon Friendship is High (220 or more) (1.2 if it is, 1 if Otherwise)
+
+      if not primaryReceiver:
+        s = 2
+      
+      if self.base_friendship >= 220:
+        f = 1.2
+
+      exp_gain = (((b * L_e)/5) * (1/s) * ((((2 * L_e) + 10)/(L_e + L_p + 10)) ** 2.5) + 1) * t * e * v * f
+
+      self.current_xp += exp_gain
+
+      if self.current_xp > self.max_xp:
+        self.level_up()
+
+      
     
