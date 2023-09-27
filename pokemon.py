@@ -160,7 +160,7 @@ class pokemon:
     #Set specific IVs or Randomize IVs
     def set_IV(self, health = random.randint(0, 31), attack = random.randint(0, 31), defense = random.randint(0, 31), sp_attack = random.randint(0, 31), sp_defense = random.randint(0, 31), speed = random.randint(0, 31)):
       self.IV.update({"Health": health, "Attack": attack, "Special Attack": sp_attack, "Defense": defense, "Special Defense": sp_defense, "Speed": speed})
-
+        
       self.refresh_stat()
 
 
