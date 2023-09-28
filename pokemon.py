@@ -115,6 +115,9 @@ class pokemon:
 
         self.current_xp = self.max_xp
 
+    def __repr__(self):
+      return (f"{self.name} | {self.nature} | Lvl. {self.level} \nIV: {self.IV}\nNatureMod: {self.nature_mod} \n{self.final_stat}")
+
     #Refresh each time Final stat formula Parameter (level, IV, EV, Base) is changed, or reset to the Default state
     def refresh_stat(self):
       
@@ -335,5 +338,6 @@ class pokemon:
           print (f"\nThe Pokemon {key} EV deducted by {value} points.\n")
         else:
           print(f"\nNo such key, existed with the name {key}\n")
-        
+    
+
         
