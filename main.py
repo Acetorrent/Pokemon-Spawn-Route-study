@@ -2,11 +2,14 @@ import pokemon
 
 
 totodile = pokemon.pokemon("Totodile", 314, "Medium Slow")
+_totodile = pokemon.pokemon("Totodile", 314, "Medium Slow")
 
 totodile.set_base_stat(50, 65, 64, 44, 48, 43)
+totodile.set_EV_yield(1, 1, 1, 1, 1, 1)
 
-for i in range(1, 101):
-    totodile.level = i
-    totodile.set_max_xp()
+_totodile.set_base_stat(50, 65, 64, 44, 48, 43)
+_totodile.set_EV_yield(252, 252, 255, 1, 1, 1)
 
-    # print (f"{totodile.current_xp}/{totodile.max_xp}")
+totodile.gain_xp(totodile, _totodile)
+
+print (totodile.EV)

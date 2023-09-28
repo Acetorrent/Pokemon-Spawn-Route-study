@@ -45,7 +45,7 @@ class pokemon:
     possible_xp_groups = ("Fast", "Medium Fast", "Medium Slow", "Slow", "Erratic", "Fluctuating")
 
     #Init and Setup, Roll Random IVs for the pokemon
-    def __init__(self, name: str, base_total_stat: int, xp_category: str, xp_yield: int, nature: str = possible_nature[random.randint(0, len(possible_nature) - 1)]):
+    def __init__(self, name: str, base_total_stat: int = 999, xp_category: str = "Medium Slow", xp_yield: int = 0, nature: str = possible_nature[random.randint(0, len(possible_nature) - 1)]):
         
         #Status Inflicted:
         self.status = []
@@ -67,6 +67,8 @@ class pokemon:
 
         #Name and Nature of the Pokemon
         self.nature = nature
+        
+        self.nick_name = name
         self.name = name
         self.possible_ability = {}
         self.ability = None
@@ -77,6 +79,8 @@ class pokemon:
         #Skill list of the Pokemons
         self.learnable_skill = {}
         self.skill = []
+
+        self.next_evolution = None
         
         #Initiate the Stats, After and Before IVs, Evs, and Final in combat stat
         self.total_stat = base_total_stat
@@ -237,8 +241,8 @@ class pokemon:
       
       self.refresh_stat()
       
-    #Allow a POkemon to gain xp
-    def gain_xp(self, front_pokemon: object, enemy: object, primaryReceiver: bool = True):
+    #Allow a Pokemon to gain xp
+    def gain_xp(self, front_pokemon: object, enemy: object):
       
       exp_gain = 0 #Total amount of exp gain
 
@@ -251,7 +255,7 @@ class pokemon:
       v = 1 #If the winning Pokémon is at or past the level where it would be able to evolve, but it has not. (1.2 if it has not evolve, 1 if otherwise )
       f = 1 #If the Pokemon Friendship is High (220 or more) (1.2 if it is, 1 if Otherwise)
 
-      if not primaryReceiver:
+      if self is not front_pokemon:
         s = 2
       
       if self.base_friendship >= 220:
@@ -261,8 +265,75 @@ class pokemon:
 
       self.current_xp += exp_gain
 
+      EV_gain = {}
+
+      EV_gain = enemy.get_EV_yield()
+
+      self.gain_EV(EV_gain)
+      
       if self.current_xp > self.max_xp:
         self.level_up()
 
-      
+    #Setting Base Friendship of a Pokemon
+    def set_base_friendship(self, value):
+      self.base_friendship = value
     
+    #Set the Base XP yield of Pokemon, this is Change when the pokemon level up
+    def set_base_xp_yield(self, value):
+      self.xp_yield = value
+
+    #Set the EV Yield of the Pokemon
+    def set_EV_yield(self, health:int = 0, attack:int = 0, sp_attack:int = 0, defense:int = 0, sp_defense:int = 0, speed:int = 0):
+      self.EV_yield = {"Health": health, "Attack": attack, "Special Attack": sp_attack, "Defense": defense, "Special Defense": sp_defense, "Speed": speed}
+    
+    #Get the EV yield of the Pokemon
+    def get_EV_yield(self) -> dict:
+      return self.EV_yield
+    
+    #Increment the EV of a Pokemon, using a dict as an input:
+    def gain_EV(self, EV_dict: dict):
+      total = 0
+      for key, value in (self.EV).items():
+        total += self.EV[key]
+      
+      remaining = 510 - total
+
+      #Check if The Total EV is greater than 510
+      for key, value in EV_dict.items():
+        remaining = 510 - total
+        if total >= 510:
+          return
+        #Check if the key exist in the dictionary key of stats
+        if key in self.EV.keys():
+          #If the EV overdrafts the 510 limit, then add EV
+          if value > remaining:
+            self.EV.update({key : (self.EV[key] + remaining)})
+            total += remaining
+
+            print (f"\nThe pokemon gain {remaining} points in {key}\n")
+          else: 
+            self.EV.update({key : (self.EV[key] + value)})
+            total += self.EV[key]
+            print (f"\nThe pokemon gain {value} points in {key}\n")
+
+          #Check if the individual EV stat is over the limit of 252
+          if self.EV[key] > 252:
+            self.EV[key] = 252
+          
+          
+        else:
+          print(f"\nError: No keys, of {key} found in list of EVs Set to Receive\n")
+    
+      
+    def reduce_EV(self, deduct_EV_dict: dict):
+
+      for key, value in deduct_EV_dict.items():
+        if deduct_EV_dict[key] in (self.EV).keys():
+          (self.EV)[key] -= deduct_EV_dict[key]
+          if (self.EV)[key] < 0:
+            (self.EV)[key] = 0
+          print (f"\nThe Pokemon {key} EV deducted by {value} points.\n")
+        else:
+          print(f"\nNo such key, existed with the name {key}\n")
+        
+        
