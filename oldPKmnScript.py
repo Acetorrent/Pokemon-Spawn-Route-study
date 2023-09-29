@@ -45,7 +45,7 @@ class pokemon:
     possible_xp_groups = ("Fast", "Medium Fast", "Medium Slow", "Slow", "Erratic", "Fluctuating")
 
     #Init and Setup, Roll Random IVs for the pokemon
-    def __init__(self, name: str, base_total_stat: int = 999, xp_category: str = "Medium Slow", xp_yield: int = 0, nature: str = possible_nature[random.randint(0, len(possible_nature) - 1)]):
+    def __init__(self, name: str, base_total_stat: int = 999, xp_category: str = "Medium Slow", xp_yield: int = 0, nature: str = None):
         
         #Status Inflicted:
         self.status = []
@@ -113,7 +113,6 @@ class pokemon:
         self.refresh_nature_mod()
         self.set_max_xp()
 
-        self.current_xp = self.max_xp
 
     def __repr__(self):
       return (f"{self.name} | {self.nature} | Lvl. {self.level} \nIV: {self.IV}\nNatureMod: {self.nature_mod} \n{self.final_stat}")
