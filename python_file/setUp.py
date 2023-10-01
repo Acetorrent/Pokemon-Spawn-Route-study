@@ -35,9 +35,3 @@ def create(pokemon):
     print (enemy.nature)
     print (enemy.nature_mod)
     print (enemy.final_stat)
-
-
-change_zone(2)
-print (current_pokemon_list)
-
-create(current_pokemon_list[random.randint(0, len(current_pokemon_list) - 1)])

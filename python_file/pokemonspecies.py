@@ -1,3 +1,5 @@
+import random
+
 class pokemonSpecies:
 
     possible_xp_groups = ('Fast', 'Medium Fast', 'Medium Slow', 'Slow', 'Erratic', 'Fluctuating')
@@ -134,15 +136,44 @@ class newPokemon(pokemonSpecies):
         #Final Base stat Calculation
         self.final_stat = {}
         self.nature = None
-        self.nature_mod = {'attack': 0.9, 'special-attack': 0.9, 'defense': 0.9, 'special-defense': 0.9, 'speed': 0.9}
+        self.nature_mod = {'attack': 1, 'special-attack': 1, 'defense': 1, 'special-defense': 1, 'speed': 1}
 
 
         #Additional Built-In Functions Setup:
 
         #-Randomly initializes a Nature:
-        self.set_random_nature()
+ 
+
+
+
+    def gain_EV(self, **stat):
+
+        total = 0
+        
+        for key, value in self.EV.items:
+            total += value
+        
+        if total >= 510:
+            return
+        
+        for key, value in stat.items():
+            if key in self.EV.keys():
+                self.EV[" "]
+
+
         
     
+
+
+
+    #----Minor Functions----#
+
+    #Set or Randomize the Pokemon IVs upon Created
+    def set_IV(self, health = random.randint(0, 31), attack = random.randint(0, 31), defense = random.randint(0, 31), sp_attack = random.randint(0, 31), sp_defense = random.randint(0, 31), speed = random.randint(0, 31)):
+      
+        self.IV.update({"health": health, "attack": attack, "special-attack": sp_attack, "defense": defense, "special-defense": sp_defense, "speed": speed})
+        self.refresh_stat()
+
 
     #Function that set a random nature to the pokemon
     def set_random_nature(self):
