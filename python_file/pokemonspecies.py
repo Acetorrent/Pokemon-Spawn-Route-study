@@ -142,26 +142,8 @@ class newPokemon(pokemonSpecies):
         #Additional Built-In Functions Setup:
 
         #-Randomly initializes a Nature:
- 
-
-
-
-    def gain_EV(self, **stat):
-
-        total = 0
-        
-        for key, value in self.EV.items:
-            total += value
-        
-        if total >= 510:
-            return
-        
-        for key, value in stat.items():
-            if key in self.EV.keys():
-                self.EV[" "]
-
-
-        
+        self.set_random_nature()
+        self.set_IV()
     
 
 
