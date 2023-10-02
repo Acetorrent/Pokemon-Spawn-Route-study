@@ -146,7 +146,8 @@ class newPokemon(pokemonSpecies):
         self.set_IV()
     
 
-
+    def __repr__(self) -> str:
+        return (f"\n--------------------------------------------\n{self.name} | Lvl. {self.level} | {self.nature} \n--IV: {self.IV}\n--Final Stat: {self.final_stat}\n--------------------------------------------\n")
 
     #----Minor Functions----#
 
