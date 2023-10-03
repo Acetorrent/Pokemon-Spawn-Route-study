@@ -15,23 +15,26 @@ enemy_pokemon = None
 
 def change_zone(number: str):
 
-    number = str(number)
+    number = int(number)
 
-    r = requests.get(base + f'location-area/')
+    r = requests.get(base + "location-area?limit=10000")
 
-    #Select the index value json
-    request_data = (r.json()['results'])[int(number)]
-    url = request_data['url']
+        #Select the index value json
+    r_data = r.json()['results']
 
-    print (url)
-    print (request_data['name'])
+    url = r_data[number]['url']
 
     d = requests.get(url)
 
     data = d.json()
 
+
     if d is None:
         return
+    
+
+
+
     #Checking json
     if d.ok:
 
@@ -122,7 +125,7 @@ def route_select():
 
 
     if route_response.lower() == "random":
-        num = random.randint(0, 732)
+        num = random.randint(0, 200)
         change_zone(num)
         return True
     elif route_response.isnumeric():
@@ -160,10 +163,11 @@ while True:
         name_temp = player_pokemon_name
 
         player_pokemon_name.strip(" ")
-
+        
         player_pokemon_name = player_pokemon_name.lower()
-        player_pokemon_name.replace(" ", "-")
+        player_pokemon_name = player_pokemon_name.replace(" ", "-")
 
+        print (f"current name: {player_pokemon_name}")
         if pokemon_exist(player_pokemon_name):
             print(f"\nPokemon Found! Initialize your starter with the name'{player_pokemon_name}'\n")
             player_pokemon = create(player_pokemon_name)

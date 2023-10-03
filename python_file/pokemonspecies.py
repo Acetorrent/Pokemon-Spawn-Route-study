@@ -152,7 +152,20 @@ class newPokemon(pokemonSpecies):
     #----Minor Functions----#
 
     #Set or Randomize the Pokemon IVs upon Created
-    def set_IV(self, health = random.randint(0, 31), attack = random.randint(0, 31), defense = random.randint(0, 31), sp_attack = random.randint(0, 31), sp_defense = random.randint(0, 31), speed = random.randint(0, 31)):
+    def set_IV(self, health = 0, attack = 0, defense = 0, sp_attack = 0, sp_defense = 0, speed = 0):
+
+        if health == 0:
+            health = random.randint(0, 31)
+        if sp_attack == 0:
+            sp_attack = random.randint(0, 31)
+        if attack == 0:
+            attack = random.randint(0, 31)
+        if defense == 0:
+            defense = random.randint(0, 31)
+        if sp_defense == 0:
+            sp_defense = random.randint(0, 31)
+        if speed == 0:
+            speed = random.randint(0, 31)
       
         self.IV.update({"health": health, "attack": attack, "special-attack": sp_attack, "defense": defense, "special-defense": sp_defense, "speed": speed})
         self.refresh_stat()
